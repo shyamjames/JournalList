@@ -92,8 +92,8 @@ fun DesertSolaceApp(repository: JournalRepository) {
             is Screen.JournalList -> {
                 JournalListScreen(
                     entries = entries,
-                    onAddEntry = { prompt ->
-                        currentScreen = Screen.AddEdit(entryToEdit = null, initialPrompt = prompt)
+                    onAddEntry = {
+                        currentScreen = Screen.AddEdit(entryToEdit = null, initialPrompt = null)
                     },
                     onEntryClick = { entry ->
                         currentScreen = Screen.Detail(entry = entry)

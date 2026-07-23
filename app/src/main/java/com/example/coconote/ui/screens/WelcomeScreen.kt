@@ -137,50 +137,6 @@ fun WelcomeScreen(
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    // Feature Bento Card 1: Daily Quote / Philosophy
-                    BentoCard(
-                        backgroundColor = DesertSurfaceContainer,
-                        cornerRadius = 28.dp,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Row(
-                            modifier = Modifier.padding(20.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Box(
-                                contentAlignment = Alignment.Center,
-                                modifier = Modifier
-                                    .size(48.dp)
-                                    .clip(CircleShape)
-                                    .background(DesertPrimary)
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.AutoAwesome,
-                                    contentDescription = null,
-                                    tint = DesertOnPrimary,
-                                    modifier = Modifier.size(24.dp)
-                                )
-                            }
-                            Spacer(modifier = Modifier.width(16.dp))
-                            Column(modifier = Modifier.weight(1f)) {
-                                Text(
-                                    text = "Thought of the Day",
-                                    style = MaterialTheme.typography.labelLarge,
-                                    color = DesertPrimary
-                                )
-                                Spacer(modifier = Modifier.height(4.dp))
-                                Text(
-                                    text = "“Write your mind down like a sanctuary in the desert, quiet and timeless.”",
-                                    style = MaterialTheme.typography.bodyMedium.copy(
-                                        fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
-                                        fontWeight = FontWeight.Medium
-                                    ),
-                                    color = DesertOnSurface
-                                )
-                            }
-                        }
-                    }
-
                     // Bento Row: 2 Mini Cards
                     Row(
                         modifier = Modifier.fillMaxWidth(),

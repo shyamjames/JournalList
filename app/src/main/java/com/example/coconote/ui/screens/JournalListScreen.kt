@@ -77,7 +77,7 @@ import java.util.Locale
 @Composable
 fun JournalListScreen(
     entries: List<JournalEntry>,
-    onAddEntry: (initialPrompt: String?) -> Unit,
+    onAddEntry: () -> Unit,
     onEntryClick: (JournalEntry) -> Unit,
     onToggleFavorite: (String) -> Unit,
     onOpenCalendar: () -> Unit
@@ -88,17 +88,6 @@ fun JournalListScreen(
     val todayFormatted = remember {
         SimpleDateFormat("EEEE, MMMM d", Locale.getDefault()).format(Date())
     }
-
-    val dailyPrompts = remember {
-        listOf(
-            "What small moment made you smile today?",
-            "What is a lesson you learned recently?",
-            "Write about a person who brought warmth to your day.",
-            "What are three things you feel grateful for right now?",
-            "Describe the atmosphere around you in this exact moment."
-        )
-    }
-    val currentDailyPrompt = remember { dailyPrompts.random() }
 
     val filteredEntries = remember(entries, searchQuery, selectedMoodFilter) {
         entries.filter { entry ->
@@ -262,57 +251,6 @@ fun JournalListScreen(
                 }
             }
 
-            // Daily Prompt Suggestion Card
-            item {
-                BentoCard(
-                    backgroundColor = DesertSecondaryContainer,
-                    cornerRadius = 24.dp,
-                    onClick = { onAddEntry(currentDailyPrompt) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp, vertical = 8.dp)
-                ) {
-                    Row(
-                        modifier = Modifier.padding(18.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Box(
-                            contentAlignment = Alignment.Center,
-                            modifier = Modifier
-                                .size(42.dp)
-                                .clip(CircleShape)
-                                .background(DesertPrimary)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.AutoAwesome,
-                                contentDescription = null,
-                                tint = DesertOnPrimary,
-                                modifier = Modifier.size(22.dp)
-                            )
-                        }
-                        Spacer(modifier = Modifier.width(14.dp))
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text(
-                                text = "DAILY INSPIRATION PROMPT",
-                                style = MaterialTheme.typography.labelLarge.copy(
-                                    fontSize = 11.sp,
-                                    color = DesertPrimary
-                                )
-                            )
-                            Spacer(modifier = Modifier.height(2.dp))
-                            Text(
-                                text = currentDailyPrompt,
-                                style = MaterialTheme.typography.bodyMedium.copy(
-                                    fontWeight = FontWeight.SemiBold,
-                                    fontSize = 14.sp
-                                ),
-                                color = DesertOnSurface
-                            )
-                        }
-                    }
-                }
-            }
-
             // Entries Header & Count
             item {
                 Row(
@@ -380,7 +318,7 @@ fun JournalListScreen(
 
         // Floating Action Button
         FloatingActionButton(
-            onClick = { onAddEntry(null) },
+            onClick = { onAddEntry() },
             containerColor = DesertPrimary,
             contentColor = DesertOnPrimary,
             shape = CircleShape,
