@@ -63,6 +63,11 @@ fun BentoCard(
     val shape = remember(cornerRadius) { RoundedCornerShape(cornerRadius) }
 
     val cardModifier = modifier
+        .then(
+            if (elevation > 0.dp) {
+                Modifier.shadow(elevation = elevation, shape = shape)
+            } else Modifier
+        )
         .clip(shape)
         .background(backgroundColor)
         .border(

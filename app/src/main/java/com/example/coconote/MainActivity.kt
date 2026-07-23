@@ -1,7 +1,9 @@
 package com.example.coconote
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedContent
@@ -16,10 +18,12 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import com.example.coconote.data.JournalRepository
 import com.example.coconote.model.JournalEntry
 import com.example.coconote.ui.screens.AddEditJournalScreen
@@ -66,11 +70,39 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun DesertSolaceApp(repository: JournalRepository) {
+    val context = LocalContext.current
     val initialScreen = remember {
         if (repository.isFirstLaunch()) Screen.Welcome else Screen.JournalList
     }
-    var currentScreen by remember { mutableStateOf<Screen>(initialScreen) }
+    var backStack by remember { mutableStateOf<List<Screen>>(listOf(initialScreen)) }
+    val currentScreen = backStack.lastOrNull() ?: initialScreen
     val entries by repository.entries.collectAsState()
+
+    var lastBackPressedTime by remember { mutableLongStateOf(0L) }
+
+    fun navigateTo(screen: Screen) {
+        backStack = backStack + screen
+    }
+
+    fun navigateBack() {
+        if (backStack.size > 1) {
+            backStack = backStack.dropLast(1)
+        }
+    }
+
+    BackHandler(enabled = true) {
+        if (backStack.size > 1) {
+            navigateBack()
+        } else {
+            val currentTime = System.currentTimeMillis()
+            if (currentTime - lastBackPressedTime < 2000) {
+                (context as? ComponentActivity)?.finish()
+            } else {
+                lastBackPressedTime = currentTime
+                Toast.makeText(context, "Press back again to exit", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
     AnimatedContent(
         targetState = currentScreen,
@@ -84,7 +116,7 @@ fun DesertSolaceApp(repository: JournalRepository) {
                 WelcomeScreen(
                     onStartJournaling = {
                         repository.setWelcomeCompleted()
-                        currentScreen = Screen.JournalList
+                        backStack = listOf(Screen.JournalList)
                     }
                 )
             }
@@ -93,16 +125,16 @@ fun DesertSolaceApp(repository: JournalRepository) {
                 JournalListScreen(
                     entries = entries,
                     onAddEntry = {
-                        currentScreen = Screen.AddEdit(entryToEdit = null, initialPrompt = null)
+                        navigateTo(Screen.AddEdit(entryToEdit = null, initialPrompt = null))
                     },
                     onEntryClick = { entry ->
-                        currentScreen = Screen.Detail(entry = entry)
+                        navigateTo(Screen.Detail(entry = entry))
                     },
                     onToggleFavorite = { id ->
                         repository.toggleFavorite(id)
                     },
                     onOpenCalendar = {
-                        currentScreen = Screen.CalendarProgress
+                        navigateTo(Screen.CalendarProgress)
                     }
                 )
             }
@@ -112,11 +144,11 @@ fun DesertSolaceApp(repository: JournalRepository) {
                     entryToEdit = targetScreen.entryToEdit,
                     initialPrompt = targetScreen.initialPrompt,
                     onBack = {
-                        currentScreen = Screen.JournalList
+                        navigateBack()
                     },
                     onSave = { savedEntry ->
                         repository.saveEntry(savedEntry)
-                        currentScreen = Screen.JournalList
+                        navigateBack()
                     }
                 )
             }
@@ -128,14 +160,14 @@ fun DesertSolaceApp(repository: JournalRepository) {
                 JournalDetailScreen(
                     entry = activeEntry,
                     onBack = {
-                        currentScreen = Screen.JournalList
+                        navigateBack()
                     },
                     onEdit = {
-                        currentScreen = Screen.AddEdit(entryToEdit = activeEntry)
+                        navigateTo(Screen.AddEdit(entryToEdit = activeEntry))
                     },
                     onDelete = {
                         repository.deleteEntry(activeEntry.id)
-                        currentScreen = Screen.JournalList
+                        navigateBack()
                     },
                     onToggleFavorite = {
                         repository.toggleFavorite(activeEntry.id)
@@ -147,10 +179,10 @@ fun DesertSolaceApp(repository: JournalRepository) {
                 CalendarProgressScreen(
                     entries = entries,
                     onBack = {
-                        currentScreen = Screen.JournalList
+                        navigateBack()
                     },
                     onEntryClick = { entry ->
-                        currentScreen = Screen.Detail(entry = entry)
+                        navigateTo(Screen.Detail(entry = entry))
                     },
                     onToggleFavorite = { id ->
                         repository.toggleFavorite(id)
