@@ -48,6 +48,8 @@ import com.example.coconote.ui.theme.DesertPrimary
 import com.example.coconote.ui.theme.DesertSurfaceContainer
 import com.example.coconote.ui.theme.DesertSurfaceContainerLow
 import com.example.coconote.ui.theme.DesertSurfaceContainerLowest
+import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.ripple
 
 @Composable
 fun BentoCard(
@@ -60,12 +62,7 @@ fun BentoCard(
 ) {
     val shape = remember(cornerRadius) { RoundedCornerShape(cornerRadius) }
 
-    val baseModifier = modifier
-        .then(
-            if (elevation > 0.dp) {
-                Modifier.shadow(elevation = elevation, shape = shape)
-            } else Modifier
-        )
+    val cardModifier = modifier
         .clip(shape)
         .background(backgroundColor)
         .border(
@@ -75,27 +72,14 @@ fun BentoCard(
         )
 
     if (onClick != null) {
-        val interactionSource = remember { MutableInteractionSource() }
-        val isPressed by interactionSource.collectIsPressedAsState()
-        val scale by animateFloatAsState(
-            targetValue = if (isPressed) 0.98f else 1f,
-            animationSpec = tween(durationMillis = 150),
-            label = "cardScale"
-        )
-
         Box(
-            modifier = baseModifier
-                .scale(scale)
-                .clickable(
-                    interactionSource = interactionSource,
-                    indication = null,
-                    onClick = onClick
-                )
+            modifier = cardModifier
+                .clickable(onClick = onClick)
         ) {
             content()
         }
     } else {
-        Box(modifier = baseModifier) {
+        Box(modifier = cardModifier) {
             content()
         }
     }
@@ -107,14 +91,6 @@ fun MoodChip(
     isSelected: Boolean = false,
     onClick: () -> Unit = {}
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
-    val isPressed by interactionSource.collectIsPressedAsState()
-    val scale by animateFloatAsState(
-        targetValue = if (isPressed) 0.94f else if (isSelected) 1.05f else 1.0f,
-        animationSpec = tween(durationMillis = 150),
-        label = "chipScale"
-    )
-
     val bgColor = if (isSelected) {
         DesertPrimary
     } else {
@@ -127,7 +103,6 @@ fun MoodChip(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
-            .scale(scale)
             .clip(CircleShape)
             .background(bgColor)
             .border(
@@ -135,11 +110,7 @@ fun MoodChip(
                 color = if (isSelected) DesertPrimary else DesertOutlineVariant,
                 shape = CircleShape
             )
-            .clickable(
-                interactionSource = interactionSource,
-                indication = null,
-                onClick = onClick
-            )
+            .clickable(onClick = onClick)
             .padding(horizontal = 14.dp, vertical = 8.dp)
     ) {
         Text(text = mood.emoji, fontSize = 16.sp)
@@ -192,14 +163,6 @@ fun PillButton(
     isPrimary: Boolean = true,
     enabled: Boolean = true
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
-    val isPressed by interactionSource.collectIsPressedAsState()
-    val scale by animateFloatAsState(
-        targetValue = if (isPressed) 0.95f else 1.0f,
-        animationSpec = tween(durationMillis = 150),
-        label = "btnScale"
-    )
-
     val bgColor = when {
         !enabled -> DesertOutlineVariant
         isPrimary -> DesertPrimary
@@ -215,13 +178,6 @@ fun PillButton(
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
-            .scale(scale)
-            .shadow(
-                elevation = if (isPrimary && enabled) 6.dp else 0.dp,
-                shape = CircleShape,
-                ambientColor = DesertPrimary.copy(alpha = 0.25f),
-                spotColor = DesertPrimary.copy(alpha = 0.25f)
-            )
             .clip(CircleShape)
             .background(bgColor)
             .border(
@@ -231,8 +187,6 @@ fun PillButton(
             )
             .clickable(
                 enabled = enabled,
-                interactionSource = interactionSource,
-                indication = null,
                 onClick = onClick
             )
             .padding(horizontal = 24.dp, vertical = 14.dp)
