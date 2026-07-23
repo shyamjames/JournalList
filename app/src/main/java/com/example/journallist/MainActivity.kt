@@ -1,4 +1,4 @@
-package com.example.coconote
+package com.example.journallist
 
 import android.os.Bundle
 import android.widget.Toast
@@ -24,15 +24,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import com.example.coconote.data.JournalRepository
-import com.example.coconote.model.JournalEntry
-import com.example.coconote.ui.screens.AddEditJournalScreen
-import com.example.coconote.ui.screens.CalendarProgressScreen
-import com.example.coconote.ui.screens.JournalDetailScreen
-import com.example.coconote.ui.screens.JournalListScreen
-import com.example.coconote.ui.screens.WelcomeScreen
-import com.example.coconote.ui.theme.DesertSolaceTheme
-import com.example.coconote.ui.theme.DesertSurface
+import com.example.journallist.data.JournalRepository
+import com.example.journallist.model.JournalEntry
+import com.example.journallist.ui.screens.AddEditJournalScreen
+import com.example.journallist.ui.screens.CalendarProgressScreen
+import com.example.journallist.ui.screens.JournalDetailScreen
+import com.example.journallist.ui.screens.JournalListScreen
+import com.example.journallist.ui.screens.WelcomeScreen
+import com.example.journallist.ui.theme.DesertSolaceTheme
+import com.example.journallist.ui.theme.DesertSurface
 
 sealed interface Screen {
     data object Welcome : Screen

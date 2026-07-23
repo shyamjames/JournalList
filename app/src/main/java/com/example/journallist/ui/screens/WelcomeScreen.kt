@@ -1,4 +1,4 @@
-package com.example.coconote.ui.screens
+package com.example.journallist.ui.screens
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -44,18 +44,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.coconote.R
-import com.example.coconote.ui.components.BentoCard
-import com.example.coconote.ui.components.PillButton
-import com.example.coconote.ui.theme.DesertOnPrimary
-import com.example.coconote.ui.theme.DesertOnSurface
-import com.example.coconote.ui.theme.DesertOnSurfaceVariant
-import com.example.coconote.ui.theme.DesertPrimary
-import com.example.coconote.ui.theme.DesertSecondaryContainer
-import com.example.coconote.ui.theme.DesertSurface
-import com.example.coconote.ui.theme.DesertSurfaceContainer
-import com.example.coconote.ui.theme.DesertSurfaceContainerLow
-import com.example.coconote.ui.theme.DesertTertiaryFixed
+import com.example.journallist.R
+import com.example.journallist.ui.components.BentoCard
+import com.example.journallist.ui.components.PillButton
+import com.example.journallist.ui.theme.DesertOnPrimary
+import com.example.journallist.ui.theme.DesertOnSurface
+import com.example.journallist.ui.theme.DesertOnSurfaceVariant
+import com.example.journallist.ui.theme.DesertPrimary
+import com.example.journallist.ui.theme.DesertSecondaryContainer
+import com.example.journallist.ui.theme.DesertSurface
+import com.example.journallist.ui.theme.DesertSurfaceContainer
+import com.example.journallist.ui.theme.DesertSurfaceContainerLow
+import com.example.journallist.ui.theme.DesertTertiaryFixed
 
 @Composable
 fun WelcomeScreen(

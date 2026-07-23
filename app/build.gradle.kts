@@ -5,11 +5,11 @@ plugins {
 
 
 android {
-    namespace = "com.example.coconote"
+    namespace = "com.example.journallist"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.coconote"
+        applicationId = "com.example.journallist"
         minSdk = 26
         targetSdk = 36
         versionCode = 1

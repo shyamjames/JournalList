@@ -1,11 +1,11 @@
-package com.example.coconote.data
+package com.example.journallist.data
 
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import com.example.coconote.model.JournalEntry
-import com.example.coconote.model.Mood
+import com.example.journallist.model.JournalEntry
+import com.example.journallist.model.Mood
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

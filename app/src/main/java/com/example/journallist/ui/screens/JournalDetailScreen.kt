@@ -1,4 +1,4 @@
-package com.example.coconote.ui.screens
+package com.example.journallist.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -43,18 +43,18 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.coconote.model.JournalEntry
-import com.example.coconote.ui.components.BentoCard
-import com.example.coconote.ui.components.TagChip
-import com.example.coconote.ui.theme.DesertOnSurface
-import com.example.coconote.ui.theme.DesertOnSurfaceVariant
-import com.example.coconote.ui.theme.DesertOutlineVariant
-import com.example.coconote.ui.theme.DesertPrimary
-import com.example.coconote.ui.theme.DesertSecondaryContainer
-import com.example.coconote.ui.theme.DesertSurface
-import com.example.coconote.ui.theme.DesertSurfaceContainerLow
-import com.example.coconote.ui.theme.DesertSurfaceContainerLowest
-import com.example.coconote.ui.theme.DesertTertiaryFixed
+import com.example.journallist.model.JournalEntry
+import com.example.journallist.ui.components.BentoCard
+import com.example.journallist.ui.components.TagChip
+import com.example.journallist.ui.theme.DesertOnSurface
+import com.example.journallist.ui.theme.DesertOnSurfaceVariant
+import com.example.journallist.ui.theme.DesertOutlineVariant
+import com.example.journallist.ui.theme.DesertPrimary
+import com.example.journallist.ui.theme.DesertSecondaryContainer
+import com.example.journallist.ui.theme.DesertSurface
+import com.example.journallist.ui.theme.DesertSurfaceContainerLow
+import com.example.journallist.ui.theme.DesertSurfaceContainerLowest
+import com.example.journallist.ui.theme.DesertTertiaryFixed
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

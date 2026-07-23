@@ -1,4 +1,4 @@
-package com.example.coconote.ui.components
+package com.example.journallist.ui.components
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -39,15 +39,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.coconote.model.Mood
-import com.example.coconote.ui.theme.DesertOnPrimary
-import com.example.coconote.ui.theme.DesertOnSurface
-import com.example.coconote.ui.theme.DesertOnSurfaceVariant
-import com.example.coconote.ui.theme.DesertOutlineVariant
-import com.example.coconote.ui.theme.DesertPrimary
-import com.example.coconote.ui.theme.DesertSurfaceContainer
-import com.example.coconote.ui.theme.DesertSurfaceContainerLow
-import com.example.coconote.ui.theme.DesertSurfaceContainerLowest
+import com.example.journallist.model.Mood
+import com.example.journallist.ui.theme.DesertOnPrimary
+import com.example.journallist.ui.theme.DesertOnSurface
+import com.example.journallist.ui.theme.DesertOnSurfaceVariant
+import com.example.journallist.ui.theme.DesertOutlineVariant
+import com.example.journallist.ui.theme.DesertPrimary
+import com.example.journallist.ui.theme.DesertSurfaceContainer
+import com.example.journallist.ui.theme.DesertSurfaceContainerLow
+import com.example.journallist.ui.theme.DesertSurfaceContainerLowest
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ripple
 

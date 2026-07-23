@@ -1,4 +1,4 @@
-package com.example.coconote.model
+package com.example.journallist.model
 
 import java.util.UUID
 
