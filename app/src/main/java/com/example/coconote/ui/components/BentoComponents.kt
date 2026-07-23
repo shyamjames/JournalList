@@ -54,47 +54,50 @@ fun BentoCard(
     modifier: Modifier = Modifier,
     backgroundColor: Color = DesertSurfaceContainerLow,
     cornerRadius: Dp = 24.dp,
-    elevation: Dp = 4.dp,
+    elevation: Dp = 2.dp,
     onClick: (() -> Unit)? = null,
     content: @Composable () -> Unit
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
-    val isPressed by interactionSource.collectIsPressedAsState()
-    val scale by animateFloatAsState(
-        targetValue = if (isPressed) 0.98f else 1f,
-        animationSpec = tween(durationMillis = 150),
-        label = "cardScale"
-    )
+    val shape = remember(cornerRadius) { RoundedCornerShape(cornerRadius) }
 
-    val shape = RoundedCornerShape(cornerRadius)
+    val baseModifier = modifier
+        .then(
+            if (elevation > 0.dp) {
+                Modifier.shadow(elevation = elevation, shape = shape)
+            } else Modifier
+        )
+        .clip(shape)
+        .background(backgroundColor)
+        .border(
+            width = 1.dp,
+            color = DesertOutlineVariant.copy(alpha = 0.5f),
+            shape = shape
+        )
 
-    Box(
-        modifier = modifier
-            .scale(scale)
-            .shadow(
-                elevation = elevation,
-                shape = shape,
-                ambientColor = DesertPrimary.copy(alpha = 0.15f),
-                spotColor = DesertPrimary.copy(alpha = 0.15f)
-            )
-            .clip(shape)
-            .background(backgroundColor)
-            .border(
-                width = 1.dp,
-                color = DesertOutlineVariant.copy(alpha = 0.5f),
-                shape = shape
-            )
-            .then(
-                if (onClick != null) {
-                    Modifier.clickable(
-                        interactionSource = interactionSource,
-                        indication = null,
-                        onClick = onClick
-                    )
-                } else Modifier
-            )
-    ) {
-        content()
+    if (onClick != null) {
+        val interactionSource = remember { MutableInteractionSource() }
+        val isPressed by interactionSource.collectIsPressedAsState()
+        val scale by animateFloatAsState(
+            targetValue = if (isPressed) 0.98f else 1f,
+            animationSpec = tween(durationMillis = 150),
+            label = "cardScale"
+        )
+
+        Box(
+            modifier = baseModifier
+                .scale(scale)
+                .clickable(
+                    interactionSource = interactionSource,
+                    indication = null,
+                    onClick = onClick
+                )
+        ) {
+            content()
+        }
+    } else {
+        Box(modifier = baseModifier) {
+            content()
+        }
     }
 }
 

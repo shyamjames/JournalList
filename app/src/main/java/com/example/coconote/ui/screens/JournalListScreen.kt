@@ -3,8 +3,10 @@ package com.example.coconote.ui.screens
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,7 +22,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AutoAwesome
@@ -43,10 +47,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.coconote.R
 import com.example.coconote.model.JournalEntry
 import com.example.coconote.model.Mood
 import com.example.coconote.ui.components.BentoCard
@@ -94,14 +100,16 @@ fun JournalListScreen(
     }
     val currentDailyPrompt = remember { dailyPrompts.random() }
 
-    val filteredEntries = entries.filter { entry ->
-        val matchesQuery = searchQuery.isBlank() ||
-                entry.title.contains(searchQuery, ignoreCase = true) ||
-                entry.content.contains(searchQuery, ignoreCase = true) ||
-                entry.tags.any { it.contains(searchQuery, ignoreCase = true) }
+    val filteredEntries = remember(entries, searchQuery, selectedMoodFilter) {
+        entries.filter { entry ->
+            val matchesQuery = searchQuery.isBlank() ||
+                    entry.title.contains(searchQuery, ignoreCase = true) ||
+                    entry.content.contains(searchQuery, ignoreCase = true) ||
+                    entry.tags.any { it.contains(searchQuery, ignoreCase = true) }
 
-        val matchesMood = selectedMoodFilter == null || entry.mood == selectedMoodFilter
-        matchesQuery && matchesMood
+            val matchesMood = selectedMoodFilter == null || entry.mood == selectedMoodFilter
+            matchesQuery && matchesMood
+        }
     }
 
     Box(
@@ -125,28 +133,40 @@ fun JournalListScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Column {
-                            Text(
-                                text = "Good Day,",
-                                style = MaterialTheme.typography.bodyMedium.copy(fontSize = 14.sp),
-                                color = DesertOnSurfaceVariant
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Image(
+                                painter = painterResource(id = R.drawable.logo),
+                                contentDescription = "Desert Solace Logo",
+                                modifier = Modifier
+                                    .size(48.dp)
+                                    .clip(RoundedCornerShape(14.dp))
                             )
-                            Text(
-                                text = "My Sanctuary 🌿",
-                                style = MaterialTheme.typography.headlineLarge.copy(
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 26.sp
-                                ),
-                                color = DesertOnSurface
-                            )
-                            Text(
-                                text = todayFormatted,
-                                style = MaterialTheme.typography.bodyMedium.copy(
-                                    fontSize = 13.sp,
-                                    fontWeight = FontWeight.Medium
-                                ),
-                                color = DesertPrimary
-                            )
+
+                            Spacer(modifier = Modifier.width(12.dp))
+
+                            Column {
+                                Text(
+                                    text = "Good Day,",
+                                    style = MaterialTheme.typography.bodyMedium.copy(fontSize = 14.sp),
+                                    color = DesertOnSurfaceVariant
+                                )
+                                Text(
+                                    text = "My Sanctuary 🌿",
+                                    style = MaterialTheme.typography.headlineLarge.copy(
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 24.sp
+                                    ),
+                                    color = DesertOnSurface
+                                )
+                                Text(
+                                    text = todayFormatted,
+                                    style = MaterialTheme.typography.bodyMedium.copy(
+                                        fontSize = 13.sp,
+                                        fontWeight = FontWeight.Medium
+                                    ),
+                                    color = DesertPrimary
+                                )
+                            }
                         }
 
                         // Calendar view button
@@ -229,7 +249,7 @@ fun JournalListScreen(
                             }
                         }
 
-                        items(Mood.entries.toTypedArray()) { mood ->
+                        items(Mood.entries, key = { it.id }) { mood ->
                             MoodChip(
                                 mood = mood,
                                 isSelected = selectedMoodFilter == mood,
@@ -476,11 +496,14 @@ fun JournalBentoCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                LazyRow(
+                Row(
                     horizontalArrangement = Arrangement.spacedBy(6.dp),
-                    modifier = Modifier.weight(1f)
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .weight(1f)
+                        .horizontalScroll(rememberScrollState())
                 ) {
-                    items(entry.tags) { tag ->
+                    entry.tags.forEach { tag ->
                         TagChip(text = tag)
                     }
                 }
