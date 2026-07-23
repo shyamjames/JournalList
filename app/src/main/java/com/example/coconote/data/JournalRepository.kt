@@ -126,6 +126,8 @@ class JournalDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABA
 
 class JournalRepository(context: Context) {
     private val dbHelper = JournalDatabaseHelper(context)
+    private val prefs = context.getSharedPreferences("desert_solace_prefs", Context.MODE_PRIVATE)
+
     private val _entries = MutableStateFlow<List<JournalEntry>>(emptyList())
     val entries: StateFlow<List<JournalEntry>> = _entries.asStateFlow()
 
@@ -134,6 +136,14 @@ class JournalRepository(context: Context) {
         if (_entries.value.isEmpty()) {
             seedSampleEntries()
         }
+    }
+
+    fun isFirstLaunch(): Boolean {
+        return !prefs.getBoolean("has_completed_welcome", false)
+    }
+
+    fun setWelcomeCompleted() {
+        prefs.edit().putBoolean("has_completed_welcome", true).apply()
     }
 
     fun refresh() {

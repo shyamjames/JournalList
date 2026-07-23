@@ -63,7 +63,10 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun DesertSolaceApp(repository: JournalRepository) {
-    var currentScreen by remember { mutableStateOf<Screen>(Screen.Welcome) }
+    val initialScreen = remember {
+        if (repository.isFirstLaunch()) Screen.Welcome else Screen.JournalList
+    }
+    var currentScreen by remember { mutableStateOf<Screen>(initialScreen) }
     val entries by repository.entries.collectAsState()
 
     AnimatedContent(
@@ -77,6 +80,7 @@ fun DesertSolaceApp(repository: JournalRepository) {
             is Screen.Welcome -> {
                 WelcomeScreen(
                     onStartJournaling = {
+                        repository.setWelcomeCompleted()
                         currentScreen = Screen.JournalList
                     }
                 )
