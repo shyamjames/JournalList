@@ -22,5 +22,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "JournalList"
+rootProject.name = "CocoNote"
 include(":app")

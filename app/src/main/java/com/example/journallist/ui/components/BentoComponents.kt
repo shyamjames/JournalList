@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -91,8 +92,9 @@ fun BentoCard(
 }
 
 @Composable
-fun MoodChip(
-    mood: Mood,
+fun FilterChip(
+    label: String,
+    emoji: String? = null,
     isSelected: Boolean = false,
     onClick: () -> Unit = {}
 ) {
@@ -118,14 +120,33 @@ fun MoodChip(
             .clickable(onClick = onClick)
             .padding(horizontal = 14.dp, vertical = 8.dp)
     ) {
-        Text(text = mood.emoji, fontSize = 16.sp)
-        Spacer(modifier = Modifier.width(6.dp))
+        if (emoji != null) {
+            Text(text = emoji, fontSize = 16.sp)
+            Spacer(modifier = Modifier.width(6.dp))
+        } else {
+            // Keep height consistent with emoji chips
+            Spacer(modifier = Modifier.height(20.dp))
+        }
         Text(
-            text = mood.label,
+            text = label,
             style = MaterialTheme.typography.labelLarge,
             color = textColor
         )
     }
+}
+
+@Composable
+fun MoodChip(
+    mood: Mood,
+    isSelected: Boolean = false,
+    onClick: () -> Unit = {}
+) {
+    FilterChip(
+        label = mood.label,
+        emoji = mood.emoji,
+        isSelected = isSelected,
+        onClick = onClick
+    )
 }
 
 @Composable

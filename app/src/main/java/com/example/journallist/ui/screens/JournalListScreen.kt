@@ -7,6 +7,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -57,6 +59,7 @@ import com.example.journallist.model.Mood
 import com.example.journallist.ui.components.BentoCard
 import com.example.journallist.ui.components.DesertTextField
 import com.example.journallist.ui.components.MoodChip
+import com.example.journallist.ui.components.FilterChip
 import com.example.journallist.ui.components.TagChip
 import com.example.journallist.ui.theme.DesertOnPrimary
 import com.example.journallist.ui.theme.DesertOnSurface
@@ -83,12 +86,13 @@ fun JournalListScreen(
 ) {
     var searchQuery by remember { mutableStateOf("") }
     var selectedMoodFilter by remember { mutableStateOf<Mood?>(null) }
+    var filterStarred by remember { mutableStateOf(false) }
 
     val todayFormatted = remember {
         SimpleDateFormat("EEEE, MMMM d", Locale.getDefault()).format(Date())
     }
 
-    val filteredEntries = remember(entries, searchQuery, selectedMoodFilter) {
+    val filteredEntries = remember(entries, searchQuery, selectedMoodFilter, filterStarred) {
         entries.filter { entry ->
             val matchesQuery = searchQuery.isBlank() ||
                     entry.title.contains(searchQuery, ignoreCase = true) ||
@@ -96,7 +100,9 @@ fun JournalListScreen(
                     entry.tags.any { it.contains(searchQuery, ignoreCase = true) }
 
             val matchesMood = selectedMoodFilter == null || entry.mood == selectedMoodFilter
-            matchesQuery && matchesMood
+            val matchesStarred = !filterStarred || entry.isFavorite
+            
+            matchesQuery && matchesMood && matchesStarred
         }
     }
 
@@ -207,7 +213,7 @@ fun JournalListScreen(
             item {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Text(
-                        text = "FILTER BY MOOD",
+                        text = "FILTERS",
                         style = MaterialTheme.typography.labelLarge.copy(
                             fontSize = 11.sp,
                             letterSpacing = 1.sp
@@ -221,20 +227,26 @@ fun JournalListScreen(
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         item {
-                            // "All" Chip
-                            Box(
-                                modifier = Modifier
-                                    .clip(CircleShape)
-                                    .background(if (selectedMoodFilter == null) DesertPrimary else DesertSurfaceContainerLowest)
-                                    .clickable { selectedMoodFilter = null }
-                                    .padding(horizontal = 14.dp, vertical = 8.dp)
-                            ) {
-                                Text(
-                                    text = "All Moods",
-                                    style = MaterialTheme.typography.labelLarge,
-                                    color = if (selectedMoodFilter == null) DesertOnPrimary else DesertOnSurface
-                                )
-                            }
+                            FilterChip(
+                                label = "All",
+                                isSelected = selectedMoodFilter == null && !filterStarred,
+                                onClick = {
+                                    selectedMoodFilter = null
+                                    filterStarred = false
+                                }
+                            )
+                        }
+                        
+                        item {
+                            FilterChip(
+                                label = "Starred",
+                                emoji = "⭐",
+                                isSelected = filterStarred,
+                                onClick = {
+                                    filterStarred = !filterStarred
+                                    if (filterStarred) selectedMoodFilter = null
+                                }
+                            )
                         }
 
                         items(Mood.entries, key = { it.id }) { mood ->
@@ -243,6 +255,7 @@ fun JournalListScreen(
                                 isSelected = selectedMoodFilter == mood,
                                 onClick = {
                                     selectedMoodFilter = if (selectedMoodFilter == mood) null else mood
+                                    if (selectedMoodFilter != null) filterStarred = false
                                 }
                             )
                         }
@@ -335,6 +348,7 @@ fun JournalListScreen(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun JournalBentoCard(
     entry: JournalEntry,
@@ -433,12 +447,10 @@ fun JournalBentoCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(
+                FlowRow(
                     horizontalArrangement = Arrangement.spacedBy(6.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .weight(1f)
-                        .horizontalScroll(rememberScrollState())
+                    verticalArrangement = Arrangement.spacedBy(6.dp),
+                    modifier = Modifier.weight(1f)
                 ) {
                     entry.tags.forEach { tag ->
                         TagChip(text = tag)
