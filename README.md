@@ -1,6 +1,6 @@
 # JournalList 🌿
 
-JournalList (formerly known as CocoNote) is a beautifully designed, modern Android journaling application built with Kotlin and Jetpack Compose. It provides a peaceful sanctuary for users to log their thoughts, track their moods, and reflect on their personal growth over time.
+JournalList is a beautifully designed, modern Android journaling application built with Kotlin and Jetpack Compose. It provides a peaceful sanctuary for users to log their thoughts, track their moods, and reflect on their personal growth over time.
 
 ## 🌟 Features
 
@@ -19,7 +19,7 @@ JournalList (formerly known as CocoNote) is a beautifully designed, modern Andro
 * **Language:** Kotlin
 * **UI Toolkit:** Jetpack Compose & Material 3
 * **Architecture:** Single Activity, custom state-based navigation with backstack management.
-* **Storage:** Local persistence (JSON-backed custom repository).
+* **Storage:** Local persistence with on-device SQLite.
 
 ## 🚀 Getting Started
 
@@ -36,6 +36,10 @@ JournalList (formerly known as CocoNote) is a beautifully designed, modern Andro
    ```
 4. Run the app on an emulator or physical device directly from Android Studio.
 
+### Privacy Defaults
+* JournalList stores entries locally on-device.
+* Android backup is explicitly disabled for app data to keep journal entries private to the device.
+
 ## 🎨 Design System (Desert Solace)
 
 The app leverages a custom color palette inspired by warm, desert tones to invoke a sense of calm and reflection:
@@ -46,3 +50,29 @@ The app leverages a custom color palette inspired by warm, desert tones to invok
 ## 📝 License
 
 This project is licensed under the MIT License.
+
+See:
+* `/home/runner/work/JournalList/JournalList/LICENSE`
+* `/home/runner/work/JournalList/JournalList/ASSET_LICENSES.md`
+
+## 📦 F-Droid Metadata
+
+F-Droid/fastlane metadata is provided under:
+* `/home/runner/work/JournalList/JournalList/fastlane/metadata/android/en-US/title.txt`
+* `/home/runner/work/JournalList/JournalList/fastlane/metadata/android/en-US/short_description.txt`
+* `/home/runner/work/JournalList/JournalList/fastlane/metadata/android/en-US/full_description.txt`
+* `/home/runner/work/JournalList/JournalList/fastlane/metadata/android/en-US/changelogs/default.txt`
+* `/home/runner/work/JournalList/JournalList/fastlane/metadata/android/en-US/images/phoneScreenshots/`
+* Screenshot placeholders are currently included and should be replaced with real device screenshots before F-Droid submission.
+
+## 🧪 Reproducible Build Verification
+
+Run from repository root:
+```bash
+./gradlew --no-daemon clean testDebugUnitTest lintDebug assembleDebug
+```
+
+Last verification run (2026-07-24) result:
+* ❌ Failed at Gradle plugin resolution
+* Error: `Plugin [id: 'com.android.application', version: '9.3.0', apply: false] was not found`
+* Impact: reproducible builds are currently blocked until `com.android.application` is pinned to a resolvable released version in `/home/runner/work/JournalList/JournalList/gradle/libs.versions.toml`.

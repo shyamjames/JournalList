@@ -218,7 +218,7 @@ fun WelcomeScreen(
                     Spacer(modifier = Modifier.height(12.dp))
 
                     Text(
-                        text = "Everything stays private on your device",
+                        text = "Everything stays private on your device (backup disabled)",
                         style = MaterialTheme.typography.bodyMedium.copy(fontSize = 12.sp),
                         color = DesertOnSurfaceVariant
                     )

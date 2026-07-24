@@ -1,0 +1,6 @@
+Initial public release of JournalList.
+
+- Single-activity Compose journaling experience
+- Mood chips, tags, favorites, and search
+- Calendar progress view
+- Local on-device storage

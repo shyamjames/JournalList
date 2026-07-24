@@ -1,0 +1,14 @@
+JournalList is a modern Android journal built with Kotlin and Jetpack Compose.
+
+Features:
+- Create, edit, and delete journal entries
+- Track mood for each entry
+- Organize thoughts with tags
+- Mark favorite entries for quick access
+- Search and filter by text, mood, and favorites
+- View monthly journaling activity in a calendar screen
+
+Privacy:
+- Local, on-device storage
+- No ads, analytics, tracking, or cloud sync
+- App backup is disabled for journal data privacy
